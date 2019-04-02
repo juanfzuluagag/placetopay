@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Pago Básico con PlacetoPay</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no">
+	<script src="https://ajax.googleapis.com/ajax/libs/d3js/5.7.0/d3.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<form id="payment-form">
+		<div class="card">
+			<div class="card-header">
+				<div class="row display-tr">
+					<h3>Pago básico con PlacetoPay</h3>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-6">
+					<!--Lista tomada de  https://dev.placetopay.com/web/redirection/estructuras-de-informacion/documenttype/-->
+					<label >Identificación</label>
+    				<select class="form-control" id="documentType" required>
+						<option value="">Tipo de identificación</option>
+						<option value="CC">CC</option>
+						<option value="CE">CE</option>
+						<option value="TI">TI</option>
+						<option value="RC">RC</option>
+						<option value="NIT">NIT</option>
+						<option value="PPN">PPN</option>
+						<option value="SSN">SSN</option>
+						<option value="LIC">LIC</option>
+						<option value="TAX">TAX</option>
+						<option value="CIP">CIP</option>
+						<option value="DNI">DNI</option>
+						<option value="DUI">DUI</option>
+						<option value="DPI">DPI</option>
+						<option value="INE">INE</option>
+						<option value="CI">CI</option>
+					</select>
+					<input class="form-control" id="document" type="text" placeholder="Número de documento">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="name">Nombre Completo</label>
+					<input class="form-control" id="name" type="text" placeholder="Nombres" required>
+					<input class="form-control" id="surname" type="text" placeholder="Apellidos" required>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="email">Datos generales</label>
+					<input class="form-control" id="email" type="email" placeholder="Correo electrónico" required>
+					<input type="text" id="mobile" name="mobile" class="form-control bfh-phone" data-format="+57 (ddd) ddd-dddd" placeholder="+57 (ddd) ddd-dddd" required>
+					<input class="form-control" id="street" type="text" placeholder="Dirección" required>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="country">Datos de ubicación</label>
+					<select class="form-control" name="country" id="country" required>
+						<option value="Colombia">Colombia</option>
+					</select>
+					<select class="form-control" name="city" id="city" required>
+						<option value="Medellin">Medellín</option>
+						<option value="Bogota">Bogotá D.C</option>
+						<option value="Armenia">Armenia</option>
+					</select>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<label for="email">Datos de compra</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Referencia de pago</span>
+						</div>
+						<input type="text" class="form-control" name="reference" id="reference">
+					</div>
+
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">Producto</span>
+						</div>
+						<input type="text" class="form-control" name="description" id="description">
+					</div>
+
+					
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text">COP $</span>
+						</div>
+						<input type="text" class="form-control" name="total" id="total" aria-label="Amount (to the nearest dollar)">
+						<div class="input-group-append">
+							<span class="input-group-text">.00</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" >
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-primary" id="submit">Comprar</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+				<div class="col-md-6">
+					<!-- Campos ocultos-->
+					<input style ="display: none" class="form-control" id="currency" type="text" value="COP">
+				</div>
+			</div>
+	</form>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$('document').ready(function(){
+			$('#payment-form').submit(function(event){
+				event.preventDefault();	
+			})
+			
+		});
+
+	</script>
+</body>
+</html>
