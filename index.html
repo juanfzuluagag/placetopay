@@ -4,7 +4,6 @@
 	<meta charset="utf-8">
 	<title>Pago Básico con PlacetoPay</title>
 	<meta name="viewport" content="width=device-width, user-scalable=no">
-	<script src="https://ajax.googleapis.com/ajax/libs/d3js/5.7.0/d3.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
@@ -39,22 +38,22 @@
 						<option value="INE">INE</option>
 						<option value="CI">CI</option>
 					</select>
-					<input class="form-control" id="document" type="text" placeholder="Número de documento">
+					<input class="form-control" id="document" type="text" value="123456789" placeholder="Número de documento">
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="name">Nombre Completo</label>
-					<input class="form-control" id="name" type="text" placeholder="Nombres" required>
-					<input class="form-control" id="surname" type="text" placeholder="Apellidos" required>
+					<input class="form-control" id="name" type="text" placeholder="Nombres" value="Maria Antonieta" required>
+					<input class="form-control" id="surname" type="text" value="De las Nieves" placeholder="Apellidos" required>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-6">
 					<label for="email">Datos generales</label>
-					<input class="form-control" id="email" type="email" placeholder="Correo electrónico" required>
-					<input type="text" id="mobile" name="mobile" class="form-control bfh-phone" data-format="+57 (ddd) ddd-dddd" placeholder="+57 (ddd) ddd-dddd" required>
-					<input class="form-control" id="street" type="text" placeholder="Dirección" required>
+					<input class="form-control" id="email" type="email" placeholder="Correo electrónico" value="chilindrina@chavo.fun" required>
+					<input type="text" id="mobile" name="mobile" class="form-control bfh-phone" data-format="+57 ddd ddd dddd" placeholder="+57 (ddd) ddd-dddd" value="+57 304 597 6565" required>
+					<input class="form-control" id="street" type="text" placeholder="Dirección" value="Vencidad 8" required>
 				</div>
 			</div>
 			<div class="row">
@@ -85,7 +84,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text">Producto</span>
 						</div>
-						<input type="text" class="form-control" name="description" id="description">
+						<input type="text" class="form-control" name="description" id="description" value="Zapatos aparentemente bonitos">
 					</div>
 
 					
@@ -93,7 +92,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text">COP $</span>
 						</div>
-						<input type="text" class="form-control" name="total" id="total" aria-label="Amount (to the nearest dollar)">
+						<input type="text" class="form-control" name="total" id="total" value="10201444">
 						<div class="input-group-append">
 							<span class="input-group-text">.00</span>
 						</div>
@@ -114,15 +113,44 @@
 			</div>
 	</form>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
 		$('document').ready(function(){
+			$('#reference').val(Date.now());
+			
 			$('#payment-form').submit(function(event){
 				event.preventDefault();	
-			})
+				var $inputs = $('#payment-form :input');
+				var array_inputs = [];
+				var json = {};
+				for (var i = 0; i < $inputs.length; i++) {
+					console.log($inputs[i]);
+					index = $inputs[i].id;
+					value = $inputs[i].value;
+					array_inputs[index] = value;
+				}
+				console.log(array_inputs);
+
+				$.ajax({
+					url: 'business/main.php',
+					type: 'POST',
+					data: {"args" : array_inputs.toString()},
+					success: function(respond) {
+						console.log(respond);
+					},
+					error: function() {
+				        console.log("No se ha podido obtener la información");
+				    }
+				});
+
+
+
+			    });
+
+				
 			
 		});
 
