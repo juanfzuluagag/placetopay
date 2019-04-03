@@ -24,6 +24,7 @@
 	$conf['rest'] = array(
 		'login' => '6dd490faf9cb87a9862245da41170ff2',
 		'secret' => '024h1IlD',
+		'seed' => $seed,
 		'nonceBase64' => $nonceBase64,
 		'tranKey' => $tranKey,
 		'url_base' => 'https://test.placetopay.com/redirection',
