@@ -2,6 +2,6 @@
 	
 	require_once('conf/conf.rest.php');
 
-	print_r($_REQUEST, true);
+	echo "los campos son". print_r($_REQUEST, true);
 
 ?>

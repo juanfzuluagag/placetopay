@@ -22,7 +22,7 @@
 					<label >Identificación</label>
     				<select class="form-control" id="documentType" required>
 						<option value="">Tipo de identificación</option>
-						<option value="CC">CC</option>
+						<option value="CC" selected>CC</option>
 						<option value="CE">CE</option>
 						<option value="TI">TI</option>
 						<option value="RC">RC</option>
@@ -124,22 +124,20 @@
 			$('#payment-form').submit(function(event){
 				event.preventDefault();	
 				var $inputs = $('#payment-form :input');
-				var array_inputs = [];
 				var json = {};
 				for (var i = 0; i < $inputs.length; i++) {
-					console.log($inputs[i]);
 					index = $inputs[i].id;
 					value = $inputs[i].value;
-					array_inputs[index] = value;
+					json[index] = value;
 				}
-				console.log(array_inputs);
+				console.log(json);
 
 				$.ajax({
 					url: 'business/main.php',
 					type: 'POST',
-					data: {"args" : array_inputs.toString()},
+					data: json,
 					success: function(respond) {
-						console.log(respond);
+						console.log("que devuelve", respond);
 					},
 					error: function() {
 				        console.log("No se ha podido obtener la información");
