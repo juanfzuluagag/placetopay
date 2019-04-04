@@ -30,7 +30,6 @@
 					$cache->create_record($all_records_payment);
 					echo json_encode($json);
 				}	
-				echo "todos los registros".print_r($all_records_payment, true);
 			}else{
 				echo json_encode($json);
 			}
