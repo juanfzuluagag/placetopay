@@ -4,17 +4,19 @@
 	 * 
 	 */
 	class REST	{
-
+		public $json_auth;
 		public $json_data;
 		private $url_base;
 
-		function __construct($conf, $args){
+		function __construct($conf, $args, $method){
 			$this->url_base = $conf['rest']['url_base'];
-			$this->json_data = $this->building_json($conf, $args);
+			$this->building_json($conf, $args, $method);
 		}
 
-		private function building_json($conf, $args){
-			$sended_json = json_encode(
+
+		private function building_json($conf, $args, $method){
+			if($method == "create_payment"){
+				$sended_json = json_encode(
   							array(
 	  							"auth" => array(
 	  								"login" => $conf['rest']['login'],
@@ -49,22 +51,38 @@
 	  							"userAgent" => "PlacetoPay SandBox"
 	  						)
 						);
-			return $sended_json;
+				$this->json_data = $sended_json;
+			}else{
+			
+			$this->json_auth = json_encode(
+		  							array(
+			  							"auth" => array(
+			  								"login" => $conf['rest']['login'],
+			  								"seed" => $conf['rest']['seed'],
+			  								"nonce" => $conf['rest']['nonceBase64'],
+			  								"tranKey" => $conf['rest']['tranKey']
+			  							),
+			  						)
+		  						);
+			}
+			
 		}
 
-		public function base_payment(){
+		public function base_payment($request_id){
 			
+			$completed_url = ($request_id == null) ? $this->url_base."/api/session" : $completed_url = $this->url_base."/api/session/".$request_id;
+			$json = ($request_id == null) ? $this->json_data : $this->json_auth;
 			$curl = curl_init();
 
 			curl_setopt_array($curl, array(
-			  CURLOPT_URL => $this->url_base."/api/session",
+			  CURLOPT_URL => $completed_url,
 			  CURLOPT_RETURNTRANSFER => true,
 			  CURLOPT_ENCODING => "",
 			  CURLOPT_MAXREDIRS => 10,
 			  CURLOPT_TIMEOUT => 30,
 			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			  CURLOPT_CUSTOMREQUEST => "POST",
-			  CURLOPT_POSTFIELDS => $this->json_data,
+			  CURLOPT_POSTFIELDS => $json,
 			  CURLOPT_HTTPHEADER => array(
 			    "Content-Type: application/json",
 			    "cache-control: no-cache"
