@@ -131,7 +131,7 @@
 				}
 
 				json['returnUrl'] = window.location.href;
-				//json['ipAddress'] = ;
+				json['method'] = 'create_payment';
 				$.ajax({
 					url: 'business/main.php',
 					type: 'POST',
