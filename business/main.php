@@ -50,7 +50,7 @@
 				}
 			}
 		}
-		echo print_r($respond_array, true);
+		echo json_encode($respond_array);
 
 	}
 

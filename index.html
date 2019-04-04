@@ -7,8 +7,14 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-	<button class="btn btn-sm btn-outline-secondary" id="payments" type="button">Ver estado de transacciones...</button>
-	<form id="payment-form">
+	<nav class="navbar navbar-light bg-light">
+	  <form class="form-inline">
+	    <button class="btn btn-outline-success" id="doing-payment" type="button">Realizar un pago...</button>
+	    <button class="btn btn-sm btn-outline-secondary" id="payments" type="button">Ver estado de transacciones...</button>
+	  </form>
+	</nav>
+	
+	<form id="payment-form" style="display: none;">
 		<div class="card">
 			<div class="card-header">
 				<div class="row display-tr">
@@ -113,6 +119,25 @@
 				</div>
 			</div>
 	</form>
+	<table class="table table-dark" id="table-payments" style="display: none;">
+		 <thead>
+		    <tr>
+		      <th scope="col">requestId</th>
+		      <th scope="col">status</th>
+		      <th scope="col">reason</th>
+		      <th scope="col">message</th>
+		      <th scope="col">date</th>
+		      <th scope="col">documentType</th>
+		      <th scope="col">document</th>
+		      <th scope="col">name</th>
+		      <th scope="col">surname</th>
+		      <th scope="col">total</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+
+		  </tbody>
+	</table>
 
 	<!-- Adiciones complementarias-->
 	<!-- Modal -->
@@ -148,15 +173,40 @@
 			$("#redirect").click(function(e){
 				location.href = $("#processUrl").val();
 			});
+			$("#doing-payment").click(function(e){
+				$("#payment-form").css("display", "block");
+				$("#table-payments").css("display", "none");
 
+			})
 			$("#payments").click(function(e){
-				console.log("BOTON!!!!")
+				$("#payment-form").css("display", "none");
+				$("#table-payments").css("display", "block");
 				$.ajax({
 					url: 'business/main.php',
 					type: 'POST',
 					data: {"method" : "get_my_payments"},
 					success: function(respond) {
-						console.log("respond", respond);
+						var data = JSON.parse(respond);
+						if(data.length != 0){
+							$.each(data, function( index, record ) {
+								json = JSON.parse(record);
+								requestId = "<th scope='col'>"+json.requestId+"</th>";
+								
+								status = "<th scope='col'>"+json.status.status+"</th>";
+								reason = "<th scope='col'>"+json.status.reason+"</th>";
+								message = "<th scope='col'>"+json.status.message+"</th>";
+								date = "<th scope='col'>"+json.status.date+"</th>";
+								documentType = "<th scope='col'>"+json.request.buyer.documentType+"</th>";
+								documenT = "<th scope='col'>"+json.request.buyer.document+"</th>";
+								name = "<th scope='col'>"+json.request.buyer.name+"</th>";
+								surname = "<th scope='col'>"+json.request.buyer.surname+"</th>";
+								total = "<th scope='col'>"+json.request.payment.amount.total+"</th>";
+								$("tbody").html($("tbody").html() + "<tr>"+requestId+status+reason+message+date+documentType+documenT+name+surname+total+"</tr");
+							});
+
+						}else{
+
+						}
 					},
 					error: function() {
 				        alert("El servidor no puede atender su solicitud en estos momentos");
@@ -174,7 +224,6 @@
 					value = $inputs[i].value;
 					json[index] = value;
 				}
-				
 				json['returnUrl'] = window.location.href;
 				json['method'] = 'create_payment';
 				$.ajax({
@@ -182,9 +231,7 @@
 					type: 'POST',
 					data: json,
 					success: function(respond) {
-
 						var data = JSON.parse(respond);
-						console.log(data);
 						if(data.status.status != undefined && data.status.status== "OK"){
 							$('#modal').modal('show');
 							$("#processUrl").val(data.processUrl);
